@@ -1,18 +1,34 @@
 import React, { Component } from 'react'
 import { View, Text, Button } from 'react-native'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { login } from '../../store/actions/auth'
+import { login } from '../../../store/actions/auth'
 
 class LoginForm extends Component {
+  static navigationOptions = {
+    title: 'Connexion',
+  };
   render() {
+    const { navigate } = this.props.navigation;
+    if (this.props.auth.isConnected) {
+      setTimeout(() => {
+        navigate('App', { name: 'John DOE' })
+      }, 10)
+    }
     return (
       <View>
         <Text> Hello in login form </Text>
         {
           this.props.auth.isConnected
             ?
-            <Text>You're connected !</Text>
+            <View>
+              <Text>You're connected !</Text>
+              <Button
+                title="Go to profile screen"
+                onPress={() => {
+                  navigate('App', { name: 'John DOE' })
+                }}
+              />
+            </View>
             :
             <Button
               title="Click me to login"
@@ -25,7 +41,7 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  ...state
+  auth: state.auth
 })
 
 const mapDispatchToProps = {
